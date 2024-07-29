@@ -10,7 +10,7 @@ import type { Prisma } from '@prisma/client';
 // ENUMS
 /////////////////////////////////////////
 
-export const TransactionIsolationLevelSchema = z.enum(['Serializable']);
+export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
 
 export const CategoryScalarFieldEnumSchema = z.enum(['id','description','descriptionTranslated','parentId','parentDescription']);
 
@@ -25,6 +25,8 @@ export const IncomesScalarFieldEnumSchema = z.enum(['id','description','amount',
 export const InvoicesScalarFieldEnumSchema = z.enum(['id','amount','month','year','accountId','createdAt','updatedAt']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
+
+export const QueryModeSchema = z.enum(['default','insensitive']);
 
 export const NullsOrderSchema = z.enum(['first','last']);
 /////////////////////////////////////////
@@ -1198,6 +1200,7 @@ export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.object({
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringFilterSchema) ]).optional(),
 }).strict();
 
@@ -1212,6 +1215,7 @@ export const StringNullableFilterSchema: z.ZodType<Prisma.StringNullableFilter> 
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableFilterSchema) ]).optional().nullable(),
 }).strict();
 
@@ -1265,6 +1269,7 @@ export const StringWithAggregatesFilterSchema: z.ZodType<Prisma.StringWithAggreg
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringWithAggregatesFilterSchema) ]).optional(),
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedStringFilterSchema).optional(),
@@ -1282,6 +1287,7 @@ export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNu
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
+  mode: z.lazy(() => QueryModeSchema).optional(),
   not: z.union([ z.string(),z.lazy(() => NestedStringNullableWithAggregatesFilterSchema) ]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
   _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
@@ -2229,6 +2235,7 @@ export const TransactionCreateOrConnectWithoutCategoryInputSchema: z.ZodType<Pri
 
 export const TransactionCreateManyCategoryInputEnvelopeSchema: z.ZodType<Prisma.TransactionCreateManyCategoryInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => TransactionCreateManyCategoryInputSchema),z.lazy(() => TransactionCreateManyCategoryInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const TransactionUpsertWithWhereUniqueWithoutCategoryInputSchema: z.ZodType<Prisma.TransactionUpsertWithWhereUniqueWithoutCategoryInput> = z.object({
@@ -2294,6 +2301,7 @@ export const TransactionCreateOrConnectWithoutAccountInputSchema: z.ZodType<Pris
 
 export const TransactionCreateManyAccountInputEnvelopeSchema: z.ZodType<Prisma.TransactionCreateManyAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => TransactionCreateManyAccountInputSchema),z.lazy(() => TransactionCreateManyAccountInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const InvoicesCreateWithoutAccountInputSchema: z.ZodType<Prisma.InvoicesCreateWithoutAccountInput> = z.object({
@@ -2323,6 +2331,7 @@ export const InvoicesCreateOrConnectWithoutAccountInputSchema: z.ZodType<Prisma.
 
 export const InvoicesCreateManyAccountInputEnvelopeSchema: z.ZodType<Prisma.InvoicesCreateManyAccountInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => InvoicesCreateManyAccountInputSchema),z.lazy(() => InvoicesCreateManyAccountInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const TransactionUpsertWithWhereUniqueWithoutAccountInputSchema: z.ZodType<Prisma.TransactionUpsertWithWhereUniqueWithoutAccountInput> = z.object({
@@ -2610,6 +2619,7 @@ export const TransactionCreateOrConnectWithoutInvoiceInputSchema: z.ZodType<Pris
 
 export const TransactionCreateManyInvoiceInputEnvelopeSchema: z.ZodType<Prisma.TransactionCreateManyInvoiceInputEnvelope> = z.object({
   data: z.union([ z.lazy(() => TransactionCreateManyInvoiceInputSchema),z.lazy(() => TransactionCreateManyInvoiceInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
 }).strict();
 
 export const AccountUpsertWithoutInvoicesInputSchema: z.ZodType<Prisma.AccountUpsertWithoutInvoicesInput> = z.object({
@@ -3231,10 +3241,12 @@ export const CategoryUpsertArgsSchema: z.ZodType<Prisma.CategoryUpsertArgs> = z.
 
 export const CategoryCreateManyArgsSchema: z.ZodType<Prisma.CategoryCreateManyArgs> = z.object({
   data: z.union([ CategoryCreateManyInputSchema,CategoryCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const CategoryCreateManyAndReturnArgsSchema: z.ZodType<Prisma.CategoryCreateManyAndReturnArgs> = z.object({
   data: z.union([ CategoryCreateManyInputSchema,CategoryCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const CategoryDeleteArgsSchema: z.ZodType<Prisma.CategoryDeleteArgs> = z.object({
@@ -3275,10 +3287,12 @@ export const AccountUpsertArgsSchema: z.ZodType<Prisma.AccountUpsertArgs> = z.ob
 
 export const AccountCreateManyArgsSchema: z.ZodType<Prisma.AccountCreateManyArgs> = z.object({
   data: z.union([ AccountCreateManyInputSchema,AccountCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const AccountCreateManyAndReturnArgsSchema: z.ZodType<Prisma.AccountCreateManyAndReturnArgs> = z.object({
   data: z.union([ AccountCreateManyInputSchema,AccountCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const AccountDeleteArgsSchema: z.ZodType<Prisma.AccountDeleteArgs> = z.object({
@@ -3319,10 +3333,12 @@ export const TransactionUpsertArgsSchema: z.ZodType<Prisma.TransactionUpsertArgs
 
 export const TransactionCreateManyArgsSchema: z.ZodType<Prisma.TransactionCreateManyArgs> = z.object({
   data: z.union([ TransactionCreateManyInputSchema,TransactionCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const TransactionCreateManyAndReturnArgsSchema: z.ZodType<Prisma.TransactionCreateManyAndReturnArgs> = z.object({
   data: z.union([ TransactionCreateManyInputSchema,TransactionCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const TransactionDeleteArgsSchema: z.ZodType<Prisma.TransactionDeleteArgs> = z.object({
@@ -3361,10 +3377,12 @@ export const FixedExpensesUpsertArgsSchema: z.ZodType<Prisma.FixedExpensesUpsert
 
 export const FixedExpensesCreateManyArgsSchema: z.ZodType<Prisma.FixedExpensesCreateManyArgs> = z.object({
   data: z.union([ FixedExpensesCreateManyInputSchema,FixedExpensesCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const FixedExpensesCreateManyAndReturnArgsSchema: z.ZodType<Prisma.FixedExpensesCreateManyAndReturnArgs> = z.object({
   data: z.union([ FixedExpensesCreateManyInputSchema,FixedExpensesCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const FixedExpensesDeleteArgsSchema: z.ZodType<Prisma.FixedExpensesDeleteArgs> = z.object({
@@ -3401,10 +3419,12 @@ export const IncomesUpsertArgsSchema: z.ZodType<Prisma.IncomesUpsertArgs> = z.ob
 
 export const IncomesCreateManyArgsSchema: z.ZodType<Prisma.IncomesCreateManyArgs> = z.object({
   data: z.union([ IncomesCreateManyInputSchema,IncomesCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const IncomesCreateManyAndReturnArgsSchema: z.ZodType<Prisma.IncomesCreateManyAndReturnArgs> = z.object({
   data: z.union([ IncomesCreateManyInputSchema,IncomesCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const IncomesDeleteArgsSchema: z.ZodType<Prisma.IncomesDeleteArgs> = z.object({
@@ -3443,10 +3463,12 @@ export const InvoicesUpsertArgsSchema: z.ZodType<Prisma.InvoicesUpsertArgs> = z.
 
 export const InvoicesCreateManyArgsSchema: z.ZodType<Prisma.InvoicesCreateManyArgs> = z.object({
   data: z.union([ InvoicesCreateManyInputSchema,InvoicesCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const InvoicesCreateManyAndReturnArgsSchema: z.ZodType<Prisma.InvoicesCreateManyAndReturnArgs> = z.object({
   data: z.union([ InvoicesCreateManyInputSchema,InvoicesCreateManyInputSchema.array() ]),
+  skipDuplicates: z.boolean().optional(),
 }).strict() ;
 
 export const InvoicesDeleteArgsSchema: z.ZodType<Prisma.InvoicesDeleteArgs> = z.object({

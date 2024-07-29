@@ -37,8 +37,12 @@ const client = new PluggyClient({
   clientSecret,
 });
 
+console.log("client", client);
+
 // Configuração de hooks e plugins
 app.addHook("onReady", async () => {
+  console.log("ON READY");
+
   try {
     const accountId = await syncAccount(client, itemId);
     await syncCategories(client);
@@ -109,3 +113,15 @@ export default async function handler(req: any, res: any) {
   await app.ready();
   app.server.emit("request", req, res);
 }
+
+async function run() {
+  await app.ready();
+
+  await app.listen({
+    port: 3000,
+  });
+
+  console.log(`Documentation running at http://localhost:3000/`);
+}
+
+run();
