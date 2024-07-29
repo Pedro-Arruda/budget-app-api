@@ -2,7 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { InvoicesSchema } from "../../prisma/generated/zod";
-import { invoicesFactory } from "../modules/invoice/transaction.factory";
+import { invoicesFactory } from "../modules/invoice/invoice.factory";
 
 export async function invoicesRoutes(fastify: FastifyInstance) {
   fastify.withTypeProvider<ZodTypeProvider>();

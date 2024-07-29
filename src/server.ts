@@ -13,14 +13,12 @@ import {
 import { PluggyClient } from "pluggy-sdk";
 import accountRoutes from "./routes/account.routes";
 import authRoutes from "./routes/auth.routes";
+import compoundInterestsRoutes from "./routes/compoundInterests.routes";
 import fixedExpensesRoutes from "./routes/fixed-expenses.routes";
 import incomesRoutes from "./routes/incomes";
 import invoicesRoutes from "./routes/invoices.routes";
 import transactionRoutes from "./routes/transaction.routes";
 import { CLIENT_ID, CLIENT_SECRET } from "./utils/constants";
-import { syncAccount } from "./utils/syncAccount";
-import { syncCategories } from "./utils/syncCategories";
-import { syncTransactions } from "./utils/syncTransactions";
 
 dotenv.config();
 
@@ -38,17 +36,17 @@ const client = new PluggyClient({
   clientSecret,
 });
 
-app.addHook("onReady", async () => {
-  console.log("INICIANDO SINCRONIZACAO");
+// app.addHook("onReady", async () => {
+//   console.log("INICIANDO SINCRONIZACAO");
 
-  try {
-    const accountId = await syncAccount(client, itemId);
-    await syncCategories(client);
-    await syncTransactions(client, accountId);
-  } catch (error: any) {
-    throw new Error("Failed to exchange token: " + error.message);
-  }
-});
+//   try {
+//     const accountId = await syncAccount(client, itemId);
+//     await syncCategories(client);
+//     await syncTransactions(client, accountId);
+//   } catch (error: any) {
+//     throw new Error("Failed to exchange token: " + error.message);
+//   }
+// });
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
@@ -85,7 +83,8 @@ app
   .register(accountRoutes, { prefix: "/accounts" })
   .register(fixedExpensesRoutes, { prefix: "/fixed-expenses" })
   .register(invoicesRoutes, { prefix: "/invoices" })
-  .register(incomesRoutes, { prefix: "/incomes" });
+  .register(incomesRoutes, { prefix: "/incomes" })
+  .register(compoundInterestsRoutes, { prefix: "/compound-interests" });
 
 export default async function handler(req: any, res: any) {
   await app.ready();
