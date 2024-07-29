@@ -3,7 +3,6 @@ import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
 import dotenv from "dotenv";
 import fastify from "fastify";
-
 import {
   ZodTypeProvider,
   jsonSchemaTransform,
@@ -24,7 +23,7 @@ import { syncTransactions } from "./utils/syncTransactions";
 
 dotenv.config();
 
-export const app = fastify({
+const app = fastify({
   pluginTimeout: 0,
 }).withTypeProvider<ZodTypeProvider>();
 app.register(cors, { origin: "*" });
@@ -38,12 +37,11 @@ const client = new PluggyClient({
   clientSecret,
 });
 
+// Configuração de hooks e plugins
 app.addHook("onReady", async () => {
   try {
     const accountId = await syncAccount(client, itemId);
-
     await syncCategories(client);
-
     await syncTransactions(client, accountId);
   } catch (error: any) {
     throw new Error("Failed to exchange token: " + error.message);
@@ -53,6 +51,7 @@ app.addHook("onReady", async () => {
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
+// Swagger
 app.register(fastifySwagger, {
   openapi: {
     info: {
@@ -78,6 +77,7 @@ app.register(fastifySwaggerUI, {
   routePrefix: "/",
 });
 
+// Rotas
 app
   .withTypeProvider<ZodTypeProvider>()
   .register(authRoutes, { prefix: "/auth" })
@@ -86,21 +86,15 @@ app
   .register(fixedExpensesRoutes, { prefix: "/fixed-expenses" })
   .register(invoicesRoutes, { prefix: "/invoices" });
 
+// Webhook
 app.post("/webhook", async (req: any, res) => {
   const { itemId, event } = req.body;
 
-  console.log("event fora do if ", event);
-
   if (event === "UPDATED") {
-    console.log("ENTROU NO IF ");
-    console.log("EVENT ", event);
-    console.log("ITEM  ID ", itemId);
-
     try {
       const item = await client.fetchItem(itemId);
       const accounts = await client.fetchAccounts(itemId);
       const transactions = await client.fetchTransactions(itemId);
-
       res.status(200).send({ message: "TEST" });
     } catch (error) {
       console.error("Erro ao atualizar informações do item:", error);
@@ -111,14 +105,7 @@ app.post("/webhook", async (req: any, res) => {
   }
 });
 
-async function run() {
+export default async function handler(req: any, res: any) {
   await app.ready();
-
-  await app.listen({
-    port: 3000,
-  });
-
-  console.log(`Documentation running at http://localhost:3000/`);
+  app.server.emit("request", req, res);
 }
-
-run();
