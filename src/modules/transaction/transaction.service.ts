@@ -1,6 +1,7 @@
 import { TransactionFilters } from "pluggy-sdk";
 import { TransactionRepository } from "../../interfaces/transaction.interface";
 import { months } from "../../utils/months";
+import { prisma } from "../../utils/prisma";
 import { getMonthIncome } from "./utils/getMonthIncome";
 
 export function sleep(ms: number): Promise<void> {
@@ -89,6 +90,10 @@ class TransactionService {
         return acumulador + Number(current.amount);
       }, 0);
 
+      await prisma.invoices.updateMany({
+        data: { amount: Number(account.balance) },
+        where: { month: new Date().getMonth() + 2 },
+      });
       const invoices = await this.transactionRepository.getInvoices();
 
       const report = invoices.map((invoice) => {

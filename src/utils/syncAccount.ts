@@ -40,6 +40,15 @@ export const syncAccount = async (client: PluggyClient, itemId: string) => {
         name: account.name,
       },
     });
+  } else {
+    await prisma.account.update({
+      where: { id: account.id },
+      data: {
+        availableCreditLimit: account.creditData?.availableCreditLimit,
+        balance: account.balance,
+        creditLimit: account.creditData?.creditLimit,
+      },
+    });
   }
 
   const accountId = accounts.results[0].id;

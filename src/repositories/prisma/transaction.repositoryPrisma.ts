@@ -32,6 +32,9 @@ class TransactionRepositoryPrisma implements TransactionRepository {
           gte: "0",
         },
       },
+      orderBy: {
+        date: "desc",
+      },
     });
 
     return result;

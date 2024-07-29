@@ -14,6 +14,7 @@ import { PluggyClient } from "pluggy-sdk";
 import accountRoutes from "./routes/account.routes";
 import authRoutes from "./routes/auth.routes";
 import fixedExpensesRoutes from "./routes/fixed-expenses.routes";
+import incomesRoutes from "./routes/incomes";
 import invoicesRoutes from "./routes/invoices.routes";
 import transactionRoutes from "./routes/transaction.routes";
 import { CLIENT_ID, CLIENT_SECRET } from "./utils/constants";
@@ -37,11 +38,8 @@ const client = new PluggyClient({
   clientSecret,
 });
 
-console.log("client", client);
-
-// Configuração de hooks e plugins
 app.addHook("onReady", async () => {
-  console.log("ON READY");
+  console.log("INICIANDO SINCRONIZACAO");
 
   try {
     const accountId = await syncAccount(client, itemId);
@@ -55,7 +53,6 @@ app.addHook("onReady", async () => {
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
-// Swagger
 app.register(fastifySwagger, {
   openapi: {
     info: {
@@ -81,33 +78,14 @@ app.register(fastifySwaggerUI, {
   routePrefix: "/",
 });
 
-// Rotas
 app
   .withTypeProvider<ZodTypeProvider>()
   .register(authRoutes, { prefix: "/auth" })
   .register(transactionRoutes, { prefix: "/transactions" })
   .register(accountRoutes, { prefix: "/accounts" })
   .register(fixedExpensesRoutes, { prefix: "/fixed-expenses" })
-  .register(invoicesRoutes, { prefix: "/invoices" });
-
-// Webhook
-app.post("/webhook", async (req: any, res) => {
-  const { itemId, event } = req.body;
-
-  if (event === "UPDATED") {
-    try {
-      const item = await client.fetchItem(itemId);
-      const accounts = await client.fetchAccounts(itemId);
-      const transactions = await client.fetchTransactions(itemId);
-      res.status(200).send({ message: "TEST" });
-    } catch (error) {
-      console.error("Erro ao atualizar informações do item:", error);
-      res.status(500).send({ message: "TEST" });
-    }
-  } else {
-    res.status(200).send({ message: "TEST" });
-  }
-});
+  .register(invoicesRoutes, { prefix: "/invoices" })
+  .register(incomesRoutes, { prefix: "/incomes" });
 
 export default async function handler(req: any, res: any) {
   await app.ready();
