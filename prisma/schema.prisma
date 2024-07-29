@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator zod {
+  provider = "zod-prisma-types"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id                    String        @id
+  description           String
+  descriptionTranslated String?
+  parentId              String?
+  parentDescription     String?
+  Transaction           Transaction[]
+
+  @@map("categories")
+}
+
+model Account {
+  id                   String        @id
+  itemId               String
+  name                 String?
+  finalNumber          Int?
+  balance              Float?
+  availableCreditLimit Float?
+  balanceCloseDate     DateTime?
+  balanceDueDate       DateTime?
+  brand                String?
+  creditLimit          Float?
+  Transaction          Transaction[]
+  Invoices             Invoices[]
+
+  @@map("accounts")
+}
+
+model Transaction {
+  id          String   @id
+  date        DateTime
+  description String
+  amount      String
+  type        String?
+
+  invoice   Invoices? @relation(fields: [invoiceId], references: [id])
+  invoiceId String?
+
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId String
+
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("transactions")
+}
+
+model FixedExpenses {
+  id          String   @id @default(uuid())
+  description String
+  amount      String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("fixed_expenses")
+}
+
+model Incomes {
+  id          String   @id @default(uuid())
+  description String
+  amount      String
+  everyMonth  Boolean? @default(false) @map("every_month")
+  month       Int?
+  year        Int?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("incomes")
+}
+
+model Invoices {
+  id        String  @id @default(uuid())
+  amount    Float
+  month     Int
+  year      Int
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId String
+
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  Transaction Transaction[]
+
+  @@map("invoices")
+}
