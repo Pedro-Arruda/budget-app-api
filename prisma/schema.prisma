@@ -49,8 +49,8 @@ model Transaction {
   invoice   Invoices? @relation(fields: [invoiceId], references: [id])
   invoiceId String?
 
-  account   Account @relation(fields: [accountId], references: [id])
-  accountId String
+  account   Account? @relation(fields: [accountId], references: [id])
+  accountId String?
 
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId String?

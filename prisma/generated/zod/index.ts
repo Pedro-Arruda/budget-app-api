@@ -77,7 +77,7 @@ export const TransactionSchema = z.object({
   amount: z.string(),
   type: z.string().nullable(),
   invoiceId: z.string().nullable(),
-  accountId: z.string(),
+  accountId: z.string().nullable(),
   categoryId: z.string().nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
@@ -457,12 +457,12 @@ export const TransactionWhereInputSchema: z.ZodType<Prisma.TransactionWhereInput
   amount: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   type: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   invoiceId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  accountId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  accountId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   categoryId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   invoice: z.union([ z.lazy(() => InvoicesNullableRelationFilterSchema),z.lazy(() => InvoicesWhereInputSchema) ]).optional().nullable(),
-  account: z.union([ z.lazy(() => AccountRelationFilterSchema),z.lazy(() => AccountWhereInputSchema) ]).optional(),
+  account: z.union([ z.lazy(() => AccountNullableRelationFilterSchema),z.lazy(() => AccountWhereInputSchema) ]).optional().nullable(),
   category: z.union([ z.lazy(() => CategoryNullableRelationFilterSchema),z.lazy(() => CategoryWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
@@ -473,7 +473,7 @@ export const TransactionOrderByWithRelationInputSchema: z.ZodType<Prisma.Transac
   amount: z.lazy(() => SortOrderSchema).optional(),
   type: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   invoiceId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
-  accountId: z.lazy(() => SortOrderSchema).optional(),
+  accountId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   categoryId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
@@ -495,12 +495,12 @@ export const TransactionWhereUniqueInputSchema: z.ZodType<Prisma.TransactionWher
   amount: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   type: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   invoiceId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  accountId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  accountId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   categoryId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   invoice: z.union([ z.lazy(() => InvoicesNullableRelationFilterSchema),z.lazy(() => InvoicesWhereInputSchema) ]).optional().nullable(),
-  account: z.union([ z.lazy(() => AccountRelationFilterSchema),z.lazy(() => AccountWhereInputSchema) ]).optional(),
+  account: z.union([ z.lazy(() => AccountNullableRelationFilterSchema),z.lazy(() => AccountWhereInputSchema) ]).optional().nullable(),
   category: z.union([ z.lazy(() => CategoryNullableRelationFilterSchema),z.lazy(() => CategoryWhereInputSchema) ]).optional().nullable(),
 }).strict());
 
@@ -511,7 +511,7 @@ export const TransactionOrderByWithAggregationInputSchema: z.ZodType<Prisma.Tran
   amount: z.lazy(() => SortOrderSchema).optional(),
   type: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   invoiceId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
-  accountId: z.lazy(() => SortOrderSchema).optional(),
+  accountId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   categoryId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
@@ -530,7 +530,7 @@ export const TransactionScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.T
   amount: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   type: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   invoiceId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  accountId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  accountId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   categoryId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
@@ -904,7 +904,7 @@ export const TransactionCreateInputSchema: z.ZodType<Prisma.TransactionCreateInp
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   invoice: z.lazy(() => InvoicesCreateNestedOneWithoutTransactionInputSchema).optional(),
-  account: z.lazy(() => AccountCreateNestedOneWithoutTransactionInputSchema),
+  account: z.lazy(() => AccountCreateNestedOneWithoutTransactionInputSchema).optional(),
   category: z.lazy(() => CategoryCreateNestedOneWithoutTransactionInputSchema).optional()
 }).strict();
 
@@ -915,7 +915,7 @@ export const TransactionUncheckedCreateInputSchema: z.ZodType<Prisma.Transaction
   amount: z.string(),
   type: z.string().optional().nullable(),
   invoiceId: z.string().optional().nullable(),
-  accountId: z.string(),
+  accountId: z.string().optional().nullable(),
   categoryId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -930,7 +930,7 @@ export const TransactionUpdateInputSchema: z.ZodType<Prisma.TransactionUpdateInp
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   invoice: z.lazy(() => InvoicesUpdateOneWithoutTransactionNestedInputSchema).optional(),
-  account: z.lazy(() => AccountUpdateOneRequiredWithoutTransactionNestedInputSchema).optional(),
+  account: z.lazy(() => AccountUpdateOneWithoutTransactionNestedInputSchema).optional(),
   category: z.lazy(() => CategoryUpdateOneWithoutTransactionNestedInputSchema).optional()
 }).strict();
 
@@ -941,7 +941,7 @@ export const TransactionUncheckedUpdateInputSchema: z.ZodType<Prisma.Transaction
   amount: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   invoiceId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  accountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   categoryId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -954,7 +954,7 @@ export const TransactionCreateManyInputSchema: z.ZodType<Prisma.TransactionCreat
   amount: z.string(),
   type: z.string().optional().nullable(),
   invoiceId: z.string().optional().nullable(),
-  accountId: z.string(),
+  accountId: z.string().optional().nullable(),
   categoryId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -977,7 +977,7 @@ export const TransactionUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Transac
   amount: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   invoiceId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  accountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   categoryId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1452,9 +1452,9 @@ export const InvoicesNullableRelationFilterSchema: z.ZodType<Prisma.InvoicesNull
   isNot: z.lazy(() => InvoicesWhereInputSchema).optional().nullable()
 }).strict();
 
-export const AccountRelationFilterSchema: z.ZodType<Prisma.AccountRelationFilter> = z.object({
-  is: z.lazy(() => AccountWhereInputSchema).optional(),
-  isNot: z.lazy(() => AccountWhereInputSchema).optional()
+export const AccountNullableRelationFilterSchema: z.ZodType<Prisma.AccountNullableRelationFilter> = z.object({
+  is: z.lazy(() => AccountWhereInputSchema).optional().nullable(),
+  isNot: z.lazy(() => AccountWhereInputSchema).optional().nullable()
 }).strict();
 
 export const CategoryNullableRelationFilterSchema: z.ZodType<Prisma.CategoryNullableRelationFilter> = z.object({
@@ -1615,6 +1615,11 @@ export const IntFilterSchema: z.ZodType<Prisma.IntFilter> = z.object({
   gt: z.number().optional(),
   gte: z.number().optional(),
   not: z.union([ z.number(),z.lazy(() => NestedIntFilterSchema) ]).optional(),
+}).strict();
+
+export const AccountRelationFilterSchema: z.ZodType<Prisma.AccountRelationFilter> = z.object({
+  is: z.lazy(() => AccountWhereInputSchema).optional(),
+  isNot: z.lazy(() => AccountWhereInputSchema).optional()
 }).strict();
 
 export const InvoicesCountOrderByAggregateInputSchema: z.ZodType<Prisma.InvoicesCountOrderByAggregateInput> = z.object({
@@ -1877,10 +1882,12 @@ export const InvoicesUpdateOneWithoutTransactionNestedInputSchema: z.ZodType<Pri
   update: z.union([ z.lazy(() => InvoicesUpdateToOneWithWhereWithoutTransactionInputSchema),z.lazy(() => InvoicesUpdateWithoutTransactionInputSchema),z.lazy(() => InvoicesUncheckedUpdateWithoutTransactionInputSchema) ]).optional(),
 }).strict();
 
-export const AccountUpdateOneRequiredWithoutTransactionNestedInputSchema: z.ZodType<Prisma.AccountUpdateOneRequiredWithoutTransactionNestedInput> = z.object({
+export const AccountUpdateOneWithoutTransactionNestedInputSchema: z.ZodType<Prisma.AccountUpdateOneWithoutTransactionNestedInput> = z.object({
   create: z.union([ z.lazy(() => AccountCreateWithoutTransactionInputSchema),z.lazy(() => AccountUncheckedCreateWithoutTransactionInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => AccountCreateOrConnectWithoutTransactionInputSchema).optional(),
   upsert: z.lazy(() => AccountUpsertWithoutTransactionInputSchema).optional(),
+  disconnect: z.union([ z.boolean(),z.lazy(() => AccountWhereInputSchema) ]).optional(),
+  delete: z.union([ z.boolean(),z.lazy(() => AccountWhereInputSchema) ]).optional(),
   connect: z.lazy(() => AccountWhereUniqueInputSchema).optional(),
   update: z.union([ z.lazy(() => AccountUpdateToOneWithWhereWithoutTransactionInputSchema),z.lazy(() => AccountUpdateWithoutTransactionInputSchema),z.lazy(() => AccountUncheckedUpdateWithoutTransactionInputSchema) ]).optional(),
 }).strict();
@@ -2213,7 +2220,7 @@ export const TransactionCreateWithoutCategoryInputSchema: z.ZodType<Prisma.Trans
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   invoice: z.lazy(() => InvoicesCreateNestedOneWithoutTransactionInputSchema).optional(),
-  account: z.lazy(() => AccountCreateNestedOneWithoutTransactionInputSchema)
+  account: z.lazy(() => AccountCreateNestedOneWithoutTransactionInputSchema).optional()
 }).strict();
 
 export const TransactionUncheckedCreateWithoutCategoryInputSchema: z.ZodType<Prisma.TransactionUncheckedCreateWithoutCategoryInput> = z.object({
@@ -2223,7 +2230,7 @@ export const TransactionUncheckedCreateWithoutCategoryInputSchema: z.ZodType<Pri
   amount: z.string(),
   type: z.string().optional().nullable(),
   invoiceId: z.string().optional().nullable(),
-  accountId: z.string(),
+  accountId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -2264,7 +2271,7 @@ export const TransactionScalarWhereInputSchema: z.ZodType<Prisma.TransactionScal
   amount: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   type: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   invoiceId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  accountId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  accountId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   categoryId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -2596,7 +2603,7 @@ export const TransactionCreateWithoutInvoiceInputSchema: z.ZodType<Prisma.Transa
   type: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  account: z.lazy(() => AccountCreateNestedOneWithoutTransactionInputSchema),
+  account: z.lazy(() => AccountCreateNestedOneWithoutTransactionInputSchema).optional(),
   category: z.lazy(() => CategoryCreateNestedOneWithoutTransactionInputSchema).optional()
 }).strict();
 
@@ -2606,7 +2613,7 @@ export const TransactionUncheckedCreateWithoutInvoiceInputSchema: z.ZodType<Pris
   description: z.string(),
   amount: z.string(),
   type: z.string().optional().nullable(),
-  accountId: z.string(),
+  accountId: z.string().optional().nullable(),
   categoryId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -2684,7 +2691,7 @@ export const TransactionCreateManyCategoryInputSchema: z.ZodType<Prisma.Transact
   amount: z.string(),
   type: z.string().optional().nullable(),
   invoiceId: z.string().optional().nullable(),
-  accountId: z.string(),
+  accountId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
@@ -2698,7 +2705,7 @@ export const TransactionUpdateWithoutCategoryInputSchema: z.ZodType<Prisma.Trans
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   invoice: z.lazy(() => InvoicesUpdateOneWithoutTransactionNestedInputSchema).optional(),
-  account: z.lazy(() => AccountUpdateOneRequiredWithoutTransactionNestedInputSchema).optional()
+  account: z.lazy(() => AccountUpdateOneWithoutTransactionNestedInputSchema).optional()
 }).strict();
 
 export const TransactionUncheckedUpdateWithoutCategoryInputSchema: z.ZodType<Prisma.TransactionUncheckedUpdateWithoutCategoryInput> = z.object({
@@ -2708,7 +2715,7 @@ export const TransactionUncheckedUpdateWithoutCategoryInputSchema: z.ZodType<Pri
   amount: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   invoiceId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  accountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -2720,7 +2727,7 @@ export const TransactionUncheckedUpdateManyWithoutCategoryInputSchema: z.ZodType
   amount: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   invoiceId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  accountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -2817,7 +2824,7 @@ export const TransactionCreateManyInvoiceInputSchema: z.ZodType<Prisma.Transacti
   description: z.string(),
   amount: z.string(),
   type: z.string().optional().nullable(),
-  accountId: z.string(),
+  accountId: z.string().optional().nullable(),
   categoryId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -2831,7 +2838,7 @@ export const TransactionUpdateWithoutInvoiceInputSchema: z.ZodType<Prisma.Transa
   type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  account: z.lazy(() => AccountUpdateOneRequiredWithoutTransactionNestedInputSchema).optional(),
+  account: z.lazy(() => AccountUpdateOneWithoutTransactionNestedInputSchema).optional(),
   category: z.lazy(() => CategoryUpdateOneWithoutTransactionNestedInputSchema).optional()
 }).strict();
 
@@ -2841,7 +2848,7 @@ export const TransactionUncheckedUpdateWithoutInvoiceInputSchema: z.ZodType<Pris
   description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   amount: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  accountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   categoryId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2853,7 +2860,7 @@ export const TransactionUncheckedUpdateManyWithoutInvoiceInputSchema: z.ZodType<
   description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   amount: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  accountId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  accountId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   categoryId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),

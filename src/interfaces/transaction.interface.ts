@@ -7,6 +7,7 @@ import {
   Transaction,
 } from "@prisma/client";
 import { z } from "zod";
+import { TransactionCreateInputSchema } from "../../prisma/generated/zod";
 
 export interface TransactionRepository {
   listTransactions(
@@ -14,6 +15,7 @@ export interface TransactionRepository {
     month?: string,
     to?: string
   ): Promise<Transaction[]>;
+  createTransaction(transaction: TransactionCreateInput): Promise<Transaction>;
   listCategories(): Promise<Category[]>;
   findAccountByItemId(itemId: string): Promise<Account | null>;
   getFixedExpenses(): Promise<FixedExpenses[]>;
@@ -30,3 +32,7 @@ export const ListTransactionsSchema = z.object({
 export const MonthReportSchema = z.object({
   itemId: z.string(),
 });
+
+export type TransactionCreateInput = z.infer<
+  typeof TransactionCreateInputSchema
+>;

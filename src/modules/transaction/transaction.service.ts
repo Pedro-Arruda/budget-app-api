@@ -1,5 +1,9 @@
+import { Transaction } from "@prisma/client";
 import { TransactionFilters } from "pluggy-sdk";
-import { TransactionRepository } from "../../interfaces/transaction.interface";
+import {
+  TransactionCreateInput,
+  TransactionRepository,
+} from "../../interfaces/transaction.interface";
 import { months } from "../../utils/months";
 import { prisma } from "../../utils/prisma";
 import { getMonthIncome } from "./utils/getMonthIncome";
@@ -75,6 +79,22 @@ class TransactionService {
     }
   }
 
+  async createTransaction(
+    transaction: TransactionCreateInput
+  ): Promise<Transaction> {
+    console.log(transaction);
+
+    try {
+      const result = await this.transactionRepository.createTransaction(
+        transaction
+      );
+
+      return result;
+    } catch (error: any) {
+      throw new Error("Failed to lit expenses: " + error.message);
+    }
+  }
+
   async monthsReport(itemId: string): Promise<any> {
     try {
       const account = await this.transactionRepository.findAccountByItemId(
@@ -94,6 +114,7 @@ class TransactionService {
         data: { amount: Number(account.balance) },
         where: { month: new Date().getMonth() + 2 },
       });
+
       const invoices = await this.transactionRepository.getInvoices();
 
       const report = invoices.map((invoice) => {

@@ -34,6 +34,33 @@ class CompoundInterestsController {
       reply.send(error);
     }
   }
+
+  async generateMultipleCompoundInterests(
+    req: FastifyRequest<{
+      Body: {
+        monthContribution: number;
+        monthTax: number;
+        totalMonths: number;
+        initialValue: number;
+      };
+    }>,
+    reply: FastifyReply
+  ): Promise<void> {
+    const { monthContribution, monthTax, totalMonths, initialValue } = req.body;
+    try {
+      const data =
+        await this.compoundInterestsService.generateMultipleCompoundInterests(
+          monthContribution,
+          monthTax,
+          totalMonths,
+          initialValue
+        );
+
+      reply.status(200).send(data);
+    } catch (error) {
+      reply.send(error);
+    }
+  }
 }
 
 export { CompoundInterestsController };

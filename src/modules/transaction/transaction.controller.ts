@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { TransactionCreateInput } from "../../interfaces/transaction.interface";
 import { TransactionService } from "./transaction.service";
 
 class TransactionController {
@@ -22,6 +23,23 @@ class TransactionController {
         month,
         year
       );
+
+      reply.status(201).send(data);
+    } catch (error) {
+      reply.send(error);
+    }
+  }
+
+  async createTransaction(
+    req: FastifyRequest<{
+      Body: TransactionCreateInput;
+    }>,
+    reply: FastifyReply
+  ): Promise<void> {
+    const transaction = req.body;
+
+    try {
+      const data = await this.transactionService.createTransaction(transaction);
 
       reply.status(201).send(data);
     } catch (error) {

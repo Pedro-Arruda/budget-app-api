@@ -13,9 +13,9 @@ export async function compoundInterestsRoutes(fastify: FastifyInstance) {
         tags: ["Compound Interests"],
         response: {
           200: z.object({
-            totalAmount: z.string(),
-            totalInvested: z.string(),
-            totalFees: z.string(),
+            totalAmount: z.number(),
+            totalInvested: z.number(),
+            totalFees: z.number(),
           }),
         },
         body: z.object({
@@ -37,6 +37,33 @@ export async function compoundInterestsRoutes(fastify: FastifyInstance) {
       }>,
       reply: FastifyReply
     ) => compoundInterestsFactory().generateAmountCompoundInterests(req, reply)
+  );
+
+  fastify.post(
+    "/multiple",
+    {
+      schema: {
+        tags: ["Compound Interests"],
+        body: z.object({
+          monthContribution: z.number(),
+          monthTax: z.number(),
+          totalMonths: z.number(),
+          initialValue: z.number(),
+        }),
+      },
+    },
+    async (
+      req: FastifyRequest<{
+        Body: {
+          monthContribution: number;
+          monthTax: number;
+          totalMonths: number;
+          initialValue: number;
+        };
+      }>,
+      reply: FastifyReply
+    ) =>
+      compoundInterestsFactory().generateMultipleCompoundInterests(req, reply)
   );
 }
 

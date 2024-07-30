@@ -6,7 +6,11 @@ import {
   Invoices,
   Transaction,
 } from "@prisma/client";
-import { TransactionRepository } from "../../interfaces/transaction.interface";
+import { randomUUID } from "node:crypto";
+import {
+  TransactionCreateInput,
+  TransactionRepository,
+} from "../../interfaces/transaction.interface";
 import { prisma } from "../../utils/prisma";
 
 class TransactionRepositoryPrisma implements TransactionRepository {
@@ -23,7 +27,6 @@ class TransactionRepositoryPrisma implements TransactionRepository {
   ): Promise<Transaction[]> {
     const result = await prisma.transaction.findMany({
       where: {
-        accountId,
         date: {
           gte: firstDayOfMonth,
           lte: lastDayOfMonth,
@@ -34,6 +37,21 @@ class TransactionRepositoryPrisma implements TransactionRepository {
       },
       orderBy: {
         date: "desc",
+      },
+    });
+
+    return result;
+  }
+
+  async createTransaction(
+    transaction: TransactionCreateInput
+  ): Promise<Transaction> {
+    const result = await prisma.transaction.create({
+      data: {
+        amount: transaction.amount,
+        date: new Date(transaction.date).toISOString(),
+        description: transaction.description,
+        id: randomUUID(),
       },
     });
 

@@ -1,9 +1,11 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
+import { z } from "zod";
 import { TransactionSchema } from "../../prisma/generated/zod";
 import {
   ListTransactionsSchema,
   MonthReportSchema,
+  TransactionCreateInput,
 } from "../interfaces/transaction.interface";
 import { transactionFactory } from "../modules/transaction/transaction.factory";
 
@@ -25,6 +27,27 @@ export async function transactionRoutes(fastify: FastifyInstance) {
       }>,
       reply: FastifyReply
     ) => transactionFactory().listTransactions(req, reply)
+  );
+
+  fastify.post(
+    "/create",
+    {
+      schema: {
+        tags: ["Transactions"],
+        body: z.object({
+          date: z.string(),
+          description: z.string(),
+          amount: z.string(),
+        }),
+        response: { 200: TransactionSchema },
+      },
+    },
+    async (
+      req: FastifyRequest<{
+        Body: TransactionCreateInput;
+      }>,
+      reply: FastifyReply
+    ) => transactionFactory().createTransaction(req, reply)
   );
 
   fastify.post(
