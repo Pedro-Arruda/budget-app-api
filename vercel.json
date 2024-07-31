@@ -1,16 +1,10 @@
 {
   "version": 2,
   "functions": {
-    "src/modules/auth/auth.service.ts": {
+    "src/server.ts": {
       "maxDuration": 60
     }
   },
-  "builds": [
-    {
-      "src": "src/server.ts",
-      "use": "@vercel/node"
-    }
-  ],
   "routes": [
     {
       "src": "(.*)",
