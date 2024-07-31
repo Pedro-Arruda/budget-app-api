@@ -1,14 +1,15 @@
 {
   "version": 2,
-  "functions": {
-    "api/server.ts": {
-      "maxDuration": 60
+  "builds": [
+    {
+      "src": "src/server.ts",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "routes": [
     {
       "src": "(.*)",
-      "dest": "/api/server.ts"
+      "dest": "/src/server.ts"
     }
   ]
 }
