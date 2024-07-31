@@ -7,16 +7,19 @@ import { invoicesFactory } from "../modules/invoice/invoice.factory";
 export async function invoicesRoutes(fastify: FastifyInstance) {
   fastify.withTypeProvider<ZodTypeProvider>();
 
-  fastify.get(
+  fastify.post(
     "/",
     {
       schema: {
         tags: ["Invoices"],
         response: { 200: z.array(InvoicesSchema) },
+        body: z.object({ accountId: z.string() }),
       },
     },
-    async (req: FastifyRequest, reply: FastifyReply) =>
-      invoicesFactory().listInvoices(req, reply)
+    async (
+      req: FastifyRequest<{ Body: { accountId: string } }>,
+      reply: FastifyReply
+    ) => invoicesFactory().listInvoices(req, reply)
   );
 }
 

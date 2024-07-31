@@ -23,7 +23,7 @@ model Category {
 }
 
 model Account {
-  id                   String        @id
+  id                   String          @id
   itemId               String
   name                 String?
   finalNumber          Int?
@@ -35,6 +35,8 @@ model Account {
   creditLimit          Float?
   Transaction          Transaction[]
   Invoices             Invoices[]
+  FixedExpenses        FixedExpenses[]
+  Incomes              Incomes[]
 
   @@map("accounts")
 }
@@ -62,11 +64,15 @@ model Transaction {
 }
 
 model FixedExpenses {
-  id          String   @id @default(uuid())
+  id          String @id @default(uuid())
   description String
   amount      String
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  account   Account? @relation(fields: [accountId], references: [id])
+  accountId String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("fixed_expenses")
 }
@@ -78,8 +84,12 @@ model Incomes {
   everyMonth  Boolean? @default(false) @map("every_month")
   month       Int?
   year        Int?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  account   Account? @relation(fields: [accountId], references: [id])
+  accountId String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("incomes")
 }

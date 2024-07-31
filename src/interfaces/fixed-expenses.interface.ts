@@ -7,8 +7,9 @@ export type FixedExpensesCreateInput = z.infer<
 >;
 
 export interface FixedExpensesRepository {
-  listFixedExpenses(): Promise<FixedExpenses[]>;
+  listFixedExpenses(accountId: string): Promise<FixedExpenses[]>;
   createFixedExpenses(
-    fixedExpense: FixedExpensesCreateInput
+    fixedExpense: FixedExpensesCreateInput,
+    accountId: string
   ): Promise<FixedExpenses>;
 }

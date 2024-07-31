@@ -7,9 +7,9 @@ class InvoicesService {
   constructor(invoicesRepository: InvoicesRepository) {
     this.invoicesRepository = invoicesRepository;
   }
-  async listInvoices(): Promise<Invoices[]> {
+  async listInvoices(accountId: string): Promise<Invoices[]> {
     try {
-      const invoices = await this.invoicesRepository.listInvoices();
+      const invoices = await this.invoicesRepository.listInvoices(accountId);
 
       return invoices;
     } catch (error: any) {

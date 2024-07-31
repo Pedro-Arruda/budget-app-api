@@ -10,11 +10,12 @@ class FixedExpensesController {
   }
 
   async listFixedExpenses(
-    req: FastifyRequest,
+    req: FastifyRequest<{ Body: { accountId: string } }>,
     reply: FastifyReply
   ): Promise<void> {
+    const { accountId } = req.body;
     try {
-      const data = await this.fixedExpensesService.listFixedExpenses();
+      const data = await this.fixedExpensesService.listFixedExpenses(accountId);
 
       reply.status(200).send(data);
     } catch (error) {
@@ -23,13 +24,16 @@ class FixedExpensesController {
   }
 
   async createFixedExpenses(
-    req: FastifyRequest<{ Body: FixedExpensesCreateInput }>,
+    req: FastifyRequest<{
+      Body: { fixedExpense: FixedExpensesCreateInput; accountId: string };
+    }>,
     reply: FastifyReply
   ): Promise<void> {
     try {
-      const fixedExpense = req.body;
+      const { fixedExpense, accountId } = req.body;
       const data = await this.fixedExpensesService.createFixedExpenses(
-        fixedExpense
+        fixedExpense,
+        accountId
       );
 
       reply.status(200).send(data);

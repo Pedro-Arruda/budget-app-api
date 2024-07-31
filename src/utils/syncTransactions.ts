@@ -8,16 +8,13 @@ export const syncTransactions = async (
 ) => {
   const transactions: any = await client.fetchAllTransactions(accountId);
 
-  const prismaTransactions = await prisma.transaction.findMany();
-
-  if (transactions.length == prismaTransactions.length) return;
-
   if (transactions.length > 0) {
     for (const transaction of transactions) {
       const foundTransaction = await prisma.transaction.findMany({
         where: {
           description: transaction.description,
           date: transaction.date,
+          accountId,
         },
       });
 

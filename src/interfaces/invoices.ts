@@ -1,5 +1,5 @@
 import { Invoices } from "@prisma/client";
 
 export interface InvoicesRepository {
-  listInvoices(): Promise<Invoices[]>;
+  listInvoices(accountId: string): Promise<Invoices[]>;
 }

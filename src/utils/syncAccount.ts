@@ -51,6 +51,5 @@ export const syncAccount = async (client: PluggyClient, itemId: string) => {
     });
   }
 
-  const accountId = accounts.results[0].id;
-  return accountId;
+  return account;
 };

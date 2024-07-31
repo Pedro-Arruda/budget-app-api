@@ -1,11 +1,7 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
-import {
-  FixedExpensesSchema,
-  IncomesCreateInputSchema,
-  IncomesSchema,
-} from "../../prisma/generated/zod";
+import { FixedExpensesSchema, IncomesSchema } from "../../prisma/generated/zod";
 import { FixedExpensesCreateInput } from "../interfaces/fixed-expenses.interface";
 import { incomesFactory } from "../modules/income/income.factory";
 
@@ -29,7 +25,13 @@ export async function incomesRoutes(fastify: FastifyInstance) {
     {
       schema: {
         tags: ["Incomes"],
-        body: IncomesCreateInputSchema,
+        body: z.object({
+          description: z.string(),
+          amount: z.string(),
+          everyMonth: z.boolean().optional().nullable(),
+          month: z.number().int().optional().nullable(),
+          year: z.number().int().optional().nullable(),
+        }),
         response: { 200: FixedExpensesSchema },
       },
     },

@@ -8,9 +8,14 @@ class InvoicesController {
     this.invoicesService = invoicesService;
   }
 
-  async listInvoices(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+  async listInvoices(
+    req: FastifyRequest<{ Body: { accountId: string } }>,
+    reply: FastifyReply
+  ): Promise<void> {
+    const { accountId } = req.body;
+
     try {
-      const data = await this.invoicesService.listInvoices();
+      const data = await this.invoicesService.listInvoices(accountId);
 
       reply.status(200).send(data);
     } catch (error) {

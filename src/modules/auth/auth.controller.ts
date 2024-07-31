@@ -32,6 +32,34 @@ class AuthController {
       reply.send(error);
     }
   }
+
+  async getConnectToken(
+    req: FastifyRequest,
+    reply: FastifyReply
+  ): Promise<void> {
+    try {
+      const data = await this.authService.getConnectToken();
+
+      reply.status(201).send(data);
+    } catch (error) {
+      reply.send(error);
+    }
+  }
+
+  async syncAccount(
+    req: FastifyRequest<{ Body: { itemId: string } }>,
+    reply: FastifyReply
+  ): Promise<void> {
+    try {
+      const { itemId } = req.body;
+
+      const data = await this.authService.syncAccount(itemId);
+
+      reply.status(201).send(data);
+    } catch (error) {
+      reply.send(error);
+    }
+  }
 }
 
 export { AuthController };

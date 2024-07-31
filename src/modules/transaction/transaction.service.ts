@@ -112,7 +112,7 @@ class TransactionService {
 
       await prisma.invoices.updateMany({
         data: { amount: Number(account.balance) },
-        where: { month: new Date().getMonth() + 2 },
+        where: { month: new Date().getMonth() + 2, accountId: account.id },
       });
 
       const invoices = await this.transactionRepository.getInvoices();

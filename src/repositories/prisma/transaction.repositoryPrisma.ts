@@ -31,6 +31,7 @@ class TransactionRepositoryPrisma implements TransactionRepository {
           gte: firstDayOfMonth,
           lte: lastDayOfMonth,
         },
+        accountId,
         amount: {
           gte: "0",
         },

@@ -10,10 +10,10 @@ class FixedExpensesService {
   constructor(fixedExpensesRepository: FixedExpensesRepository) {
     this.fixedExpensesRepository = fixedExpensesRepository;
   }
-  async listFixedExpenses(): Promise<FixedExpenses[]> {
+  async listFixedExpenses(accountId: string): Promise<FixedExpenses[]> {
     try {
       const fixedExpenses =
-        await this.fixedExpensesRepository.listFixedExpenses();
+        await this.fixedExpensesRepository.listFixedExpenses(accountId);
 
       return fixedExpenses;
     } catch (error: any) {
@@ -22,11 +22,15 @@ class FixedExpensesService {
   }
 
   async createFixedExpenses(
-    fixedExpense: FixedExpensesCreateInput
+    fixedExpense: FixedExpensesCreateInput,
+    accountId: string
   ): Promise<FixedExpenses> {
     try {
       const fixedExpenses =
-        await this.fixedExpensesRepository.createFixedExpenses(fixedExpense);
+        await this.fixedExpensesRepository.createFixedExpenses(
+          fixedExpense,
+          accountId
+        );
 
       return fixedExpenses;
     } catch (error: any) {
