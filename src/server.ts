@@ -29,7 +29,6 @@ app.register(cors, { origin: "*" });
 
 const clientId = CLIENT_ID;
 const clientSecret = CLIENT_SECRET;
-const itemId = "cc884117-f5b2-4774-97f9-694dd0b8762f";
 
 const client = new PluggyClient({
   clientId,
@@ -44,7 +43,7 @@ const client = new PluggyClient({
 //     await prisma.incomes.deleteMany();
 //     await prisma.invoices.deleteMany();
 //     await prisma.transaction.deleteMany();
-//     await prisma.category.deleteMany();
+//     // await prisma.category.deleteMany();
 //   } catch (error: any) {
 //     throw new Error("Failed to exchange token: " + error.message);
 //   }

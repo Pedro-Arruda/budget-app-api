@@ -9,44 +9,30 @@ export const syncTransactions = async (
   const transactions: any = await client.fetchAllTransactions(accountId);
 
   if (transactions.length > 0) {
-    for (const transaction of transactions) {
-      const foundTransaction = await prisma.transaction.findMany({
-        where: {
-          description: transaction.description,
-          date: transaction.date,
-          accountId,
-        },
-      });
+    const promises = transactions.map(async (transaction: any) => {
+      const { creditCardMetadata } = transaction;
 
-      if (foundTransaction.length === 0) {
-        const { creditCardMetadata } = transaction;
+      if (creditCardMetadata && creditCardMetadata.installmentNumber === 1) {
+        await generateInstallmnets(creditCardMetadata, transaction, accountId);
+      } else if (!creditCardMetadata) {
+        console.log(`CRIANDO TRANSACAO - ${transaction.description}`);
 
-        if (creditCardMetadata && creditCardMetadata.installmentNumber === 1) {
-          await generateInstallmnets(
-            creditCardMetadata,
-            transaction,
-            accountId
-          );
-        } else {
-          if (!creditCardMetadata) {
-            console.log(`CRIANDO TRANSACAO - ${transaction.description}`);
-
-            await prisma.transaction.create({
-              data: {
-                amount: String(transaction.amount),
-                date: transaction.date,
-                description: transaction.description,
-                id: transaction.id,
-                accountId,
-                type: transaction.type,
-                ...(transaction.category && {
-                  categoryId: transaction.categoryId,
-                }),
-              },
-            });
-          }
-        }
+        return prisma.transaction.create({
+          data: {
+            amount: String(transaction.amount),
+            date: transaction.date,
+            description: transaction.description,
+            id: transaction.id,
+            accountId,
+            type: transaction.type,
+            ...(transaction.category && {
+              categoryId: transaction.categoryId,
+            }),
+          },
+        });
       }
-    }
+    });
+
+    await Promise.all(promises);
   }
 };

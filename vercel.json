@@ -1,5 +1,10 @@
 {
   "version": 2,
+  "functions": {
+    "src/modules/auth/auth.service.ts": {
+      "maxDuration": 60
+    }
+  },
   "builds": [
     {
       "src": "src/server.ts",

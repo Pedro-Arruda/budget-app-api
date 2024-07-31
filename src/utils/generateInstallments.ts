@@ -7,73 +7,79 @@ export const generateInstallmnets = async (
   transaction: Transaction & { categoryId: string },
   accountId: string
 ) => {
+  const promises = [];
+  const invoicesMap = new Map();
+
   for (let i = 1; i <= creditCardMetadata.totalInstallments!; i++) {
     const newDate = new Date(transaction.date);
     newDate.setMonth(newDate.getMonth() + (i - 1));
 
     const newDescription = transaction.description.replace("1", `${i}`);
-
     console.log(`CRIANDO TRANSACAO (PARCELA) - ${newDescription}`);
 
     const transactionId = randomUUID();
 
-    await prisma.transaction.create({
-      data: {
-        amount: String(transaction.amount),
-        date: newDate,
-        description: newDescription,
-        id: transactionId,
-        accountId,
-        type: "CREDIT",
-        ...(transaction.category && {
-          categoryId: transaction.categoryId,
-        }),
-      },
-    });
+    const invoiceMonth = (newDate.getMonth() + 2) % 12 || 12;
+    const invoiceYear =
+      newDate.getFullYear() + (newDate.getMonth() === 11 ? 1 : 0);
 
-    let invoiceMonth = newDate.getMonth() + 2;
+    let invoiceId;
 
-    let invoiceYear = newDate.getFullYear();
-
-    if (invoiceMonth == 13) {
-      invoiceMonth = 1;
-      invoiceYear += 1;
-    }
-
-    let foundInvoice = await prisma.invoices.findMany({
-      where: {
-        month: invoiceMonth,
-        year: invoiceYear,
-        accountId,
-      },
-    });
-
-    if (foundInvoice.length === 0) {
-      const invoice = await prisma.invoices.create({
-        data: {
+    // Verifica se a fatura já foi encontrada
+    if (invoicesMap.has(`${invoiceMonth}-${invoiceYear}`)) {
+      invoiceId = invoicesMap.get(`${invoiceMonth}-${invoiceYear}`);
+    } else {
+      const foundInvoice = await prisma.invoices.findFirst({
+        where: {
           month: invoiceMonth,
           year: invoiceYear,
-          amount: transaction.amount,
           accountId,
         },
       });
 
-      console.log(`CRIADA FATURA DO MES ${invoiceMonth} de ${invoiceYear}`);
+      if (!foundInvoice) {
+        const invoice = await prisma.invoices.create({
+          data: {
+            month: invoiceMonth,
+            year: invoiceYear,
+            amount: transaction.amount,
+            accountId,
+          },
+        });
 
-      await prisma.transaction.update({
-        data: { invoiceId: invoice.id },
-        where: { id: transactionId },
-      });
-    } else {
-      await prisma.transaction.update({
-        data: { invoiceId: foundInvoice[0].id },
-        where: { id: transactionId },
-      });
+        console.log(`CRIADA FATURA DO MES ${invoiceMonth} de ${invoiceYear}`);
+        invoiceId = invoice.id;
+      } else {
+        invoiceId = foundInvoice.id;
+        await prisma.invoices.update({
+          data: { amount: foundInvoice.amount + transaction.amount },
+          where: { id: foundInvoice.id },
+        });
+      }
 
-      await prisma.invoices.update({
-        data: { amount: foundInvoice[0].amount + transaction.amount },
-        where: { id: foundInvoice[0].id },
-      });
+      // Armazena o ID da fatura no mapa
+      invoicesMap.set(`${invoiceMonth}-${invoiceYear}`, invoiceId);
     }
+
+    // Adiciona a criação da transação à lista de promessas
+    promises.push(
+      prisma.transaction.create({
+        data: {
+          amount: String(transaction.amount),
+          date: newDate,
+          description: newDescription,
+          id: transactionId,
+          accountId,
+          type: "CREDIT",
+          ...(transaction.category && {
+            categoryId: transaction.categoryId,
+          }),
+          invoiceId, // Adiciona a fatura diretamente
+        },
+      })
+    );
   }
+
+  // Aguarda todas as promessas de transação serem concluídas
+  await Promise.all(promises);
 };
