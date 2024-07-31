@@ -31,6 +31,7 @@ export const syncTransactions = async (
           },
         });
       }
+      return null;
     });
 
     await Promise.all(promises);
