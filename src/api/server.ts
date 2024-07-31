@@ -11,14 +11,14 @@ import {
 } from "fastify-type-provider-zod";
 
 import { PluggyClient } from "pluggy-sdk";
-import accountRoutes from "./routes/account.routes";
-import authRoutes from "./routes/auth.routes";
-import compoundInterestsRoutes from "./routes/compoundInterests.routes";
-import fixedExpensesRoutes from "./routes/fixed-expenses.routes";
-import incomesRoutes from "./routes/incomes";
-import invoicesRoutes from "./routes/invoices.routes";
-import transactionRoutes from "./routes/transaction.routes";
-import { CLIENT_ID, CLIENT_SECRET } from "./utils/constants";
+import accountRoutes from "../routes/account.routes";
+import authRoutes from "../routes/auth.routes";
+import compoundInterestsRoutes from "../routes/compoundInterests.routes";
+import fixedExpensesRoutes from "../routes/fixed-expenses.routes";
+import incomesRoutes from "../routes/incomes";
+import invoicesRoutes from "../routes/invoices.routes";
+import transactionRoutes from "../routes/transaction.routes";
+import { CLIENT_ID, CLIENT_SECRET } from "../utils/constants";
 
 dotenv.config();
 
