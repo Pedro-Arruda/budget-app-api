@@ -6,15 +6,24 @@ import {
 import { prisma } from "../../utils/prisma";
 
 class FixedExpensesRepositoryPrisma implements FixedExpensesRepository {
-  async listFixedExpenses(): Promise<FixedExpenses[]> {
-    const result = await prisma.fixedExpenses.findMany();
+  async listFixedExpenses(accountId: string): Promise<FixedExpenses[]> {
+    const result = await prisma.fixedExpenses.findMany({
+      where: { accountId },
+    });
     return result;
   }
 
   async createFixedExpenses(
-    fixedExpense: FixedExpensesCreateInput
+    fixedExpense: FixedExpensesCreateInput,
+    accountId: string
   ): Promise<FixedExpenses> {
-    const result = await prisma.fixedExpenses.create({ data: fixedExpense });
+    const result = await prisma.fixedExpenses.create({
+      data: {
+        amount: fixedExpense.amount,
+        description: fixedExpense.description,
+        accountId,
+      },
+    });
 
     return result;
   }

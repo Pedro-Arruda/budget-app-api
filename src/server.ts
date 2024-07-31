@@ -40,9 +40,11 @@ const client = new PluggyClient({
 //   console.log("INICIANDO SINCRONIZACAO");
 
 //   try {
-//     const accountId = await syncAccount(client, itemId);
-//     await syncCategories(client);
-//     await syncTransactions(client, accountId);
+//     await prisma.fixedExpenses.deleteMany();
+//     await prisma.incomes.deleteMany();
+//     await prisma.invoices.deleteMany();
+//     await prisma.transaction.deleteMany();
+//     await prisma.category.deleteMany();
 //   } catch (error: any) {
 //     throw new Error("Failed to exchange token: " + error.message);
 //   }

@@ -9,9 +9,14 @@ class IncomesController {
     this.incomeService = incomeService;
   }
 
-  async listIncomes(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+  async listIncomes(
+    req: FastifyRequest<{ Body: { accountId: string } }>,
+    reply: FastifyReply
+  ): Promise<void> {
+    const { accountId } = req.body;
+
     try {
-      const data = await this.incomeService.listIncomes();
+      const data = await this.incomeService.listIncomes(accountId);
 
       reply.status(200).send(data);
     } catch (error) {
@@ -20,12 +25,14 @@ class IncomesController {
   }
 
   async createIncome(
-    req: FastifyRequest<{ Body: IncomesCreateInput }>,
+    req: FastifyRequest<{
+      Body: { income: IncomesCreateInput; accountId: string };
+    }>,
     reply: FastifyReply
   ): Promise<void> {
     try {
-      const fixedExpense = req.body;
-      const data = await this.incomeService.createIncomes(fixedExpense);
+      const { income, accountId } = req.body;
+      const data = await this.incomeService.createIncomes(income, accountId);
 
       reply.status(200).send(data);
     } catch (error) {

@@ -44,6 +44,7 @@ export const generateInstallmnets = async (
       where: {
         month: invoiceMonth,
         year: invoiceYear,
+        accountId,
       },
     });
 

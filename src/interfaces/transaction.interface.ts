@@ -18,9 +18,9 @@ export interface TransactionRepository {
   createTransaction(transaction: TransactionCreateInput): Promise<Transaction>;
   listCategories(): Promise<Category[]>;
   findAccountByItemId(itemId: string): Promise<Account | null>;
-  getFixedExpenses(): Promise<FixedExpenses[]>;
-  getIncomes(): Promise<Incomes[]>;
-  getInvoices(): Promise<Invoices[]>;
+  getFixedExpenses(accountId: string): Promise<FixedExpenses[]>;
+  getIncomes(accountId: string): Promise<Incomes[]>;
+  getInvoices(accountId: string): Promise<Invoices[]>;
 }
 
 export const ListTransactionsSchema = z.object({

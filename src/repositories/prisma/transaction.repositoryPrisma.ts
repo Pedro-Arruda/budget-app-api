@@ -65,17 +65,20 @@ class TransactionRepositoryPrisma implements TransactionRepository {
     return result;
   }
 
-  async getFixedExpenses(): Promise<FixedExpenses[]> {
-    const result = await prisma.fixedExpenses.findMany();
+  async getFixedExpenses(accountId: string): Promise<FixedExpenses[]> {
+    const result = await prisma.fixedExpenses.findMany({
+      where: { accountId },
+    });
     return result;
   }
 
-  async getIncomes(): Promise<Incomes[]> {
-    const result = await prisma.incomes.findMany();
+  async getIncomes(accountId: string): Promise<Incomes[]> {
+    const result = await prisma.incomes.findMany({ where: { accountId } });
+
     return result;
   }
 
-  async getInvoices(): Promise<Invoices[]> {
+  async getInvoices(accountId: string): Promise<Invoices[]> {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1;
     const currentYear = currentDate.getFullYear();
@@ -90,6 +93,7 @@ class TransactionRepositoryPrisma implements TransactionRepository {
 
     const result = await prisma.invoices.findMany({
       where: {
+        accountId,
         OR: monthsAndYears.map(({ month, year }) => ({ month, year })),
       },
       orderBy: [{ year: "asc" }, { month: "asc" }],

@@ -103,8 +103,11 @@ class TransactionService {
 
       if (!account) throw new Error("ItemId invalid ");
 
-      const fixedExpenses = await this.transactionRepository.getFixedExpenses();
-      const incomes = await this.transactionRepository.getIncomes();
+      const fixedExpenses = await this.transactionRepository.getFixedExpenses(
+        account.id
+      );
+
+      const incomes = await this.transactionRepository.getIncomes(account.id);
 
       const totalFixedExpenses = fixedExpenses.reduce((acumulador, current) => {
         return acumulador + Number(current.amount);
@@ -115,7 +118,7 @@ class TransactionService {
         where: { month: new Date().getMonth() + 2, accountId: account.id },
       });
 
-      const invoices = await this.transactionRepository.getInvoices();
+      const invoices = await this.transactionRepository.getInvoices(account.id);
 
       const report = invoices.map((invoice) => {
         const expenses = totalFixedExpenses + invoice.amount;

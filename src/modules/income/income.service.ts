@@ -10,9 +10,9 @@ class IncomesService {
   constructor(incomeRepository: IncomesRepository) {
     this.incomeRepository = incomeRepository;
   }
-  async listIncomes(): Promise<Incomes[]> {
+  async listIncomes(accountId: string): Promise<Incomes[]> {
     try {
-      const income = await this.incomeRepository.listIncomes();
+      const income = await this.incomeRepository.listIncomes(accountId);
 
       return income;
     } catch (error: any) {
@@ -20,9 +20,15 @@ class IncomesService {
     }
   }
 
-  async createIncomes(fixedExpense: IncomesCreateInput): Promise<Incomes> {
+  async createIncomes(
+    fixedExpense: IncomesCreateInput,
+    accountId: string
+  ): Promise<Incomes> {
     try {
-      const income = await this.incomeRepository.createIncome(fixedExpense);
+      const income = await this.incomeRepository.createIncome(
+        fixedExpense,
+        accountId
+      );
 
       return income;
     } catch (error: any) {
