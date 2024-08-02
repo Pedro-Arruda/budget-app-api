@@ -7,9 +7,6 @@ export const syncCategories = async (client: PluggyClient) => {
   const categories: any = await client.fetchCategories();
   const prismaCategories = await prisma.category.findMany();
 
-  console.log(categories.total);
-  console.log(prismaCategories.length);
-
   if (categories.total == prismaCategories.length) {
     console.log("NENHUMA CATEGORIA ADICIONADA");
     return;

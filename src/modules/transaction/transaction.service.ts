@@ -82,8 +82,6 @@ class TransactionService {
   async createTransaction(
     transaction: TransactionCreateInput
   ): Promise<Transaction> {
-    console.log(transaction);
-
     try {
       const result = await this.transactionRepository.createTransaction(
         transaction

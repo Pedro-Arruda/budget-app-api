@@ -17,8 +17,10 @@ import compoundInterestsRoutes from "./routes/compoundInterests.routes";
 import fixedExpensesRoutes from "./routes/fixed-expenses.routes";
 import incomesRoutes from "./routes/incomes";
 import invoicesRoutes from "./routes/invoices.routes";
+import itemRoutes from "./routes/item.routes";
 import transactionRoutes from "./routes/transaction.routes";
 import { CLIENT_ID, CLIENT_SECRET } from "./utils/constants";
+import { prisma } from "./utils/prisma";
 
 dotenv.config();
 
@@ -35,19 +37,19 @@ const client = new PluggyClient({
   clientSecret,
 });
 
-// app.addHook("onReady", async () => {
-//   console.log("INICIANDO SINCRONIZACAO");
+app.addHook("onReady", async () => {
+  console.log("INICIANDO SINCRONIZACAO");
 
-//   try {
-//     await prisma.fixedExpenses.deleteMany();
-//     await prisma.incomes.deleteMany();
-//     await prisma.invoices.deleteMany();
-//     await prisma.transaction.deleteMany();
-//     // await prisma.category.deleteMany();
-//   } catch (error: any) {
-//     throw new Error("Failed to exchange token: " + error.message);
-//   }
-// });
+  try {
+    // await prisma.fixedExpenses.deleteMany();
+    // await prisma.incomes.deleteMany();
+    await prisma.invoices.deleteMany();
+    await prisma.transaction.deleteMany();
+    // await prisma.category.deleteMany();
+  } catch (error: any) {
+    throw new Error("Failed to exchange token: " + error.message);
+  }
+});
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
@@ -81,6 +83,7 @@ app
   .withTypeProvider<ZodTypeProvider>()
   .register(authRoutes, { prefix: "/auth" })
   .register(transactionRoutes, { prefix: "/transactions" })
+  .register(itemRoutes, { prefix: "/item" })
   .register(accountRoutes, { prefix: "/accounts" })
   .register(fixedExpensesRoutes, { prefix: "/fixed-expenses" })
   .register(invoicesRoutes, { prefix: "/invoices" })

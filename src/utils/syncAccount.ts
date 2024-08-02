@@ -12,8 +12,6 @@ export const syncAccount = async (client: PluggyClient, itemId: string) => {
 
   const account = accounts.results[0];
 
-  console.log(await prisma.account.findMany());
-
   const existingAccount = await prisma.account.findUnique({
     where: { id: account.id },
   });

@@ -11,7 +11,6 @@ export const getMonthIncome = (
     if (income.everyMonth) {
       amount = amount + Number(income.amount);
     }
-    console.log(income);
 
     if (income.month === month && income.year === year)
       amount += Number(income.amount);
