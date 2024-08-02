@@ -20,7 +20,6 @@ import invoicesRoutes from "./routes/invoices.routes";
 import itemRoutes from "./routes/item.routes";
 import transactionRoutes from "./routes/transaction.routes";
 import { CLIENT_ID, CLIENT_SECRET } from "./utils/constants";
-import { prisma } from "./utils/prisma";
 
 dotenv.config();
 
@@ -43,8 +42,8 @@ app.addHook("onReady", async () => {
   try {
     // await prisma.fixedExpenses.deleteMany();
     // await prisma.incomes.deleteMany();
-    await prisma.invoices.deleteMany();
-    await prisma.transaction.deleteMany();
+    // await prisma.invoices.deleteMany();
+    // await prisma.transaction.deleteMany();
     // await prisma.category.deleteMany();
   } catch (error: any) {
     throw new Error("Failed to exchange token: " + error.message);
