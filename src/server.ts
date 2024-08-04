@@ -28,14 +28,6 @@ const app = fastify({
 }).withTypeProvider<ZodTypeProvider>();
 app.register(cors, { origin: "*" });
 
-const clientId = CLIENT_ID;
-const clientSecret = CLIENT_SECRET;
-
-const client = new PluggyClient({
-  clientId,
-  clientSecret,
-});
-
 app.addHook("onReady", async () => {
   console.log("INICIANDO SINCRONIZACAO");
 

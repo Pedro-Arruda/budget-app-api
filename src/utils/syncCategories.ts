@@ -12,8 +12,15 @@ export const syncCategories = async (client: PluggyClient) => {
     return;
   }
 
-  if (categories.total > 0) {
-    for (const category of categories.results) {
+  const prismaCategoryIds = new Set(
+    prismaCategories.map((category) => category.id)
+  );
+  const newCategories = categories.results.filter(
+    (category: any) => !prismaCategoryIds.has(category.id)
+  );
+
+  if (newCategories.total > 0) {
+    for (const category of newCategories) {
       await prisma.category.create({
         data: {
           description: category.description,
@@ -23,6 +30,8 @@ export const syncCategories = async (client: PluggyClient) => {
           parentId: category.parentId,
         },
       });
+
+      console.log("CATEGORIA ADICIONADA - ", category.description);
     }
   }
 
