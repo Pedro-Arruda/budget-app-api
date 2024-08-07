@@ -122,11 +122,12 @@ class TransactionService {
         const expenses = totalFixedExpenses + invoice.amount;
         const income = getMonthIncome(incomes, invoice.month, invoice.year);
         const profit = income - expenses;
+        const invoiceBalance = invoice.month == new Date().getMonth() ? account.balance :  invoice.amount
 
         return {
           month: months[invoice.month - 1].label,
           expenses,
-          invoiceBalance: invoice.amount,
+          invoiceBalance,
           income,
           profit,
         };
